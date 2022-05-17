@@ -7,14 +7,17 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import { getPopularMovies } from '../api/movies';
+import { getPopularMovies, getMoviesByName } from '../api/movies';
 import Card from '../components/Card';
-//import Colors from '../constants/Colors';
+import { Searchbar } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 
 const HomeScreen = ({ navigation }) => {
   const [movies, setMovies] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     getPopularMovies().then((response) => {
@@ -23,38 +26,69 @@ const HomeScreen = ({ navigation }) => {
     });
   }, []);
 
+  useEffect(() => {
+    if (size(search) > 0) {
+      getMoviesByName(search).then((response) => {
+        setMovies(response.results);
+        setLoading(false);
+      });
+    }
+  }, [search]);
+
+  const onChangeSearch = (e) => {
+    console.log(e);
+    if (size(e) > 0) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+    setSearch(e);
+  };
+
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      {loading ? (
-        <ActivityIndicator
-          style={{
-            marginTop: 200,
-          }}
-          size="large"
-          color="#0000ff"
-        />
-      ) : size(movies) == 0 ? (
-        <Text style={styles.text}>No se encontraron peliculas</Text>
-      ) : (
-        
-        <View style={styles.view}>
-          <Text style={styles.title}>Popular Movies</Text>
-          <View style={styles.line}></View>
-          {map(movies, (movie) => {
-            console.log(movies);
-            return (
-              <Card
-                key={movie.id}
-                textBtn="Know more"
-                color={'red'}
-                movie={movie}
-                navigation={navigation}
-              />
-            );
-          })}
-        </View>
-      )}
-    </ScrollView>
+    <SafeAreaView style={styles.view}>
+      <Searchbar
+        placeholder="Search a movie"
+        iconColor="#4E73DF"
+        icon="arrow-left"
+        style={styles.input}
+        inputStyle={{ color: '#000' }}
+        onChangeText={onChangeSearch}
+      />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {loading ? (
+          <ActivityIndicator
+            style={{
+              marginTop: 200,
+            }}
+            size="large"
+            color="#0000ff"
+
+          />
+        ) : size(movies) == 0 ? (
+          <Text style={styles.text}>No se encontraron peliculas</Text>
+        ) : (
+
+          <View style={styles.view}>
+            <Text style={styles.title}>My Movies App</Text>
+            <View style={styles.line}></View>
+            {map(movies, (movie, index) => {
+              //console.log(movie.id);
+              return (
+                <Card
+                  key={movie.id}
+                  index={index}
+                  textBtn="Know more"
+                  color={'red'}
+                  movie={movie}
+                  navigation={navigation}
+                />
+              );
+            })}
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -83,6 +117,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'gray',
   },
+  input: {
+    marginTop: -3,
+  },
+  container: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
 });
 
 export default HomeScreen;
+

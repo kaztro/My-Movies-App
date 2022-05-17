@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 
 const Card = ({ movie, color, textBtn, navigation }) => {
-    const { _id, title, poster_path, release_date, overview, vote_average } = movie;
+    const { id, title, poster_path, release_date, overview, vote_average } = movie;
 
-    const [imageURL] = `https://image.tmdb.org/t/p/original${poster_path}`;
+    const imageURL = `https://image.tmdb.org/t/p/original${poster_path}`;
 
     return (
         <SafeAreaView style={styles.card}>
@@ -22,7 +22,7 @@ const Card = ({ movie, color, textBtn, navigation }) => {
             <View style={styles.viewCard}>
                 <View style={[styles.button, { backgroundColor: color }]}>
                     <TouchableOpacity
-                        onPress={() => navigation.navigate('details', { _id })}>
+                        onPress={() => navigation.navigate('details', { id })}>
                         <Text style={styles.buttonText}>{textBtn}</Text>
                     </TouchableOpacity>
                 </View>
