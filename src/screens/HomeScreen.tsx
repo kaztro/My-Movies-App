@@ -1,105 +1,87 @@
-import React from 'react';
+import { map, size } from 'lodash';
+import React, { useEffect, useState } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
-  View,
   Text,
-  StatusBar,
+  View,
+  ScrollView,
+  ActivityIndicator,
 } from 'react-native';
+import { getPopularMovies } from '../api/movies';
+import Card from '../components/Card';
+//import Colors from '../constants/Colors';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
-const HomeScreen: () => React$Node = () => {
+const HomeScreen = ({ navigation }) => {
+  const [movies, setMovies] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getPopularMovies().then((response) => {
+      setMovies(response.results);
+      setLoading(false);
+    });
+  }, []);
+
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>HomeScreen.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      {loading ? (
+        <ActivityIndicator
+          style={{
+            marginTop: 200,
+          }}
+          size="large"
+          color="#0000ff"
+        />
+      ) : size(movies) == 0 ? (
+        <Text style={styles.text}>No se encontraron peliculas</Text>
+      ) : (
+        
+        <View style={styles.view}>
+          <Text style={styles.title}>Popular Movies</Text>
+          <View style={styles.line}></View>
+          {map(movies, (movie) => {
+            console.log(movies);
+            return (
+              <Card
+                key={movie.id}
+                textBtn="Know more"
+                color={'red'}
+                movie={movie}
+                navigation={navigation}
+              />
+            );
+          })}
+        </View>
+      )}
+    </ScrollView>
   );
 };
 
+/**
+ *@ignore
+ */
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  view: {
+    flexDirection: 'column',
+    alignItems: 'center',
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  title: {
+    fontFamily: 'NunitoSans-Bold',
+    marginTop: 20,
+    fontSize: 30,
+    color: '#566573',
   },
-  body: {
-    backgroundColor: Colors.white,
+  line: {
+    height: 1,
+    width: '90%',
+    backgroundColor: '#D5D8DC',
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  text: {
+    fontFamily: 'NunitoSans-Bold',
+    textAlign: 'center',
+    fontSize: 20,
+    color: 'gray',
   },
 });
 
