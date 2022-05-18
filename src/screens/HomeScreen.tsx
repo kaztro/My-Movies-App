@@ -80,8 +80,7 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   view: {
     flexDirection: 'column',
-    alignItems: 'center',
-    marginBottom: 45
+    alignItems: 'center'
   },
   title: {
     marginTop: 20,
@@ -95,7 +94,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#D5D8DC',
   },
   text: {
-    fontFamily: 'NunitoSans-Bold',
     textAlign: 'center',
     fontSize: 20,
     color: 'gray',
