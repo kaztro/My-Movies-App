@@ -1,4 +1,4 @@
-import { API_HOST, API_KEY } from '../constants/URL';
+import { API_HOST, API_SEARCH_HOST, API_KEY } from '../constants/URL';
 
 
 export function getPopularMovies() {
@@ -13,8 +13,8 @@ export function getPopularMovies() {
     });
 }
 
-export function getMoviesByName(title: string) {
-  const url = `${API_HOST}?${API_KEY}&query=${title}`;
+export function getMoviesByName(title) {
+  const url = `${API_SEARCH_HOST}?${API_KEY}&query=${title}`;
 
   return fetch(url)
     .then((response) => {

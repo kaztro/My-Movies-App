@@ -18,6 +18,7 @@ const HomeScreen = ({ navigation }) => {
   const [movies, setMovies] = useState(null);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [sMovies, setSMovies] = useState(null);
 
   useEffect(() => {
     getPopularMovies().then((response) => {
@@ -27,16 +28,15 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    if (size(search) > 0) {
+    if (size(search) >= 0) {
       getMoviesByName(search).then((response) => {
-        setMovies(response.results);
+        setSMovies(response.results);
         setLoading(false);
       });
     }
   }, [search]);
 
   const onChangeSearch = (e) => {
-    console.log(e);
     if (size(e) > 0) {
       setLoading(true);
     } else {
@@ -44,6 +44,41 @@ const HomeScreen = ({ navigation }) => {
     }
     setSearch(e);
   };
+
+  const popMovies = () => {
+    return (
+      map(movies, (movie, index) => {
+        //console.log(movie.id);
+        return (
+          <Card
+            key={movie.id}
+            index={index}
+            textBtn="Know more"
+            color={'red'}
+            movie={movie}
+            navigation={navigation}
+          />
+        );
+      })
+    )
+  }
+
+  const searchMovies = () => {
+    return (
+      map(sMovies, (movie, index) => {
+        return (
+          <Card
+            key={movie.id}
+            index={index}
+            textBtn="Know more"
+            color={'red'}
+            movie={movie}
+            navigation={navigation}
+          />
+        );
+      })
+    )
+  }
 
   return (
     <SafeAreaView style={styles.view}>
@@ -68,23 +103,10 @@ const HomeScreen = ({ navigation }) => {
         ) : size(movies) == 0 ? (
           <Text style={styles.text}>No se encontraron peliculas</Text>
         ) : (
-
           <View style={styles.view}>
             <Text style={styles.title}>My Movies App</Text>
             <View style={styles.line}></View>
-            {map(movies, (movie, index) => {
-              //console.log(movie.id);
-              return (
-                <Card
-                  key={movie.id}
-                  index={index}
-                  textBtn="Know more"
-                  color={'red'}
-                  movie={movie}
-                  navigation={navigation}
-                />
-              );
-            })}
+            {size(sMovies) == 0 ? popMovies() : searchMovies()}
           </View>
         )}
       </ScrollView>
