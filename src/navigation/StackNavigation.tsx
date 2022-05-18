@@ -3,8 +3,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 
-import HomeScreen from '../screens/HomeScreen.tsx';
-import DetailsScreen from '../screens/DetailsScreen.tsx';
+import HomeScreen from '../screens/HomeScreen';
+import DetailsScreen from '../screens/DetailsScreen';
+import SplashScreen from '../screens/SplashScreen';
 
 const Stack = createStackNavigator();
 
@@ -35,12 +36,23 @@ export default function StackNavigation(props) {
     return (
         <Stack.Navigator>
             <Stack.Screen
+                name="splash"
+                component={SplashScreen}
+                options={{
+                    title: '',
+                    headerShown: false,
+                    headerLeft: () => buttonLeft(),
+                }}
+            />
+            <Stack.Screen
                 name="home"
                 component={HomeScreen}
                 options={{
                     title: '',
+                    headerShown: false,
                     headerLeft: () => buttonLeft(),
                 }}
+                
             />
             <Stack.Screen
                 name="details"

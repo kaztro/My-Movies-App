@@ -11,8 +11,7 @@ import { getPopularMovies, getMoviesByName } from '../api/movies';
 import Card from '../components/Card';
 import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-
+import LottieView from 'lottie-react-native';
 
 const HomeScreen = ({ navigation }) => {
   const [movies, setMovies] = useState(null);
@@ -47,14 +46,13 @@ const HomeScreen = ({ navigation }) => {
 
   const popMovies = () => {
     return (
-      map(movies, (movie, index) => {
+      map(movies, (movie) => {
         //console.log(movie.id);
         return (
           <Card
             key={movie.id}
-            index={index}
             textBtn="Know more"
-            color={'red'}
+            color={'black'}
             movie={movie}
             navigation={navigation}
           />
@@ -65,13 +63,12 @@ const HomeScreen = ({ navigation }) => {
 
   const searchMovies = () => {
     return (
-      map(sMovies, (movie, index) => {
+      map(sMovies, (movie) => {
         return (
           <Card
             key={movie.id}
-            index={index}
             textBtn="Know more"
-            color={'red'}
+            color={'black'}
             movie={movie}
             navigation={navigation}
           />
@@ -85,23 +82,22 @@ const HomeScreen = ({ navigation }) => {
       <Searchbar
         placeholder="Search a movie"
         iconColor="#4E73DF"
-        icon="arrow-left"
+        icon="magnify"
         style={styles.input}
         inputStyle={{ color: '#000' }}
-        onChangeText={onChangeSearch}
-      />
+        onChangeText={onChangeSearch} value={search} />
       <ScrollView showsVerticalScrollIndicator={false}>
         {loading ? (
-          <ActivityIndicator
-            style={{
-              marginTop: 200,
-            }}
-            size="large"
-            color="#0000ff"
-
-          />
+          <View>
+            <LottieView
+              source={require('../assets/loading.json')}
+              autoPlay
+              loop={false}
+              speed={0.5}
+            />
+          </View>
         ) : size(movies) == 0 ? (
-          <Text style={styles.text}>No se encontraron peliculas</Text>
+          <Text style={styles.text}>We cannot find any movies</Text>
         ) : (
           <View style={styles.view}>
             <Text style={styles.title}>My Movies App</Text>
@@ -121,12 +117,13 @@ const styles = StyleSheet.create({
   view: {
     flexDirection: 'column',
     alignItems: 'center',
+    marginBottom: 45
   },
   title: {
-    fontFamily: 'NunitoSans-Bold',
     marginTop: 20,
     fontSize: 30,
-    color: '#566573',
+    color: 'black',
+    fontWeight: 'bold',
   },
   line: {
     height: 1,
@@ -140,7 +137,8 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   input: {
-    marginTop: -3,
+    marginTop: 0,
+    height: 60
   },
   container: {
     flexDirection: 'column',

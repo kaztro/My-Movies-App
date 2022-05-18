@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, View, Image } from 'react-native';
 import { IconButton, Text, Title } from 'react-native-paper';
 import { getMovieById } from '../api/movies';
-//import ModalBody from '../components/ModalBody';
 import { ScrollView } from 'react-native-gesture-handler';
 import { map, size } from 'lodash';
 
@@ -79,6 +78,7 @@ const styles = StyleSheet.create({
         height: 500,
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 30,
+        resizeMode: 'stretch'
     },
     info: {
         backgroundColor: '#fff',

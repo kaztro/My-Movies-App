@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import StackNavigation from './StackNavigation';
-//import DrawerContent from './DrawerContent';
 
 const Drawer = createDrawerNavigator();
 
