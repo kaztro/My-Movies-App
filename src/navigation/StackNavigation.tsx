@@ -6,6 +6,7 @@ import { IconButton } from 'react-native-paper';
 import HomeScreen from '../screens/HomeScreen';
 import DetailsScreen from '../screens/DetailsScreen';
 import SplashScreen from '../screens/SplashScreen';
+import SearchScreen from '../screens/SearchScreen';
 
 const Stack = createStackNavigator();
 
@@ -18,7 +19,7 @@ export default function StackNavigation(props) {
                 <IconButton
                     icon="arrow-left"
                     onPress={() => navigation.goBack()}
-                    color="#FFF"
+                    color="#323F5E"
                 />
             );
     };
@@ -49,10 +50,19 @@ export default function StackNavigation(props) {
                 component={HomeScreen}
                 options={{
                     title: '',
-                    headerShown: false,
+                    headerRight: () => buttonRight(),
                     headerLeft: () => buttonLeft(),
                 }}
-                
+
+            />
+            <Stack.Screen
+                name="search"
+                component={SearchScreen}
+                options={{
+                    title: '',
+                    headerTransparent: true,
+                    headerLeft: () => buttonLeft('search'),
+                }}
             />
             <Stack.Screen
                 name="details"

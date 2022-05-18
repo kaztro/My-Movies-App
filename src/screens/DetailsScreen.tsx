@@ -10,16 +10,16 @@ const DetailsScreen = ({ route }) => {
     const [visible, setVisible] = useState(false);
     const [movie, setMovie] = useState(null);
 
-    console.log(id);
-
     useEffect(() => {
         getMovieById(id).then((response) => {
             setMovie(response);
-            //console.log(response);
         });
     }, []);
 
     if (!movie) return null;
+
+    
+    console.log(movie);
 
     const imageURL = `https://image.tmdb.org/t/p/original${movie.poster_path}`;
     
@@ -29,6 +29,7 @@ const DetailsScreen = ({ route }) => {
                 <InfoImage path={imageURL} />
                 <InfoTitle movie={movie} />
                 <Text style={styles.overview}>{movie.overview}</Text>
+                <Text>{movie.}</Text>
             </ScrollView>
         </SafeAreaView>
     );
@@ -53,7 +54,7 @@ const InfoImage = ({ path }) => {
 const InfoTitle = ({ movie }) => {
     return (
         <View style={styles.viewInfo}>
-            <Title style={{ color: '#F29F05', fontWeight: 'bold', fontSize: 23 }}>
+            <Title style={{ color: '#F29F05', fontWeight: 'bold', fontSize: 23, marginTop: 20 }}>
                 {movie.title}
             </Title>
         </View>
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
         height: 500,
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 30,
-        resizeMode: 'stretch'
+        resizeMode: 'contain'
     },
     info: {
         backgroundColor: '#fff',
@@ -93,49 +94,11 @@ const styles = StyleSheet.create({
     viewInfo: {
         marginHorizontal: 30,
     },
-    viewRating: {
-        marginHorizontal: 30,
-        marginTop: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    viewModal: {
-        justifyContent: 'flex-end',
-        alignItems: 'flex-end',
-    },
-    viewFooter: {
-        marginVertical: 20,
-        marginHorizontal: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    footerItem: {
-        borderRadius: 100,
-        width: 60,
-        height: 60,
-        backgroundColor: '#fff',
-        borderColor: '#F87311',
-        borderWidth: 2,
-    },
-    textItem: {
-        fontFamily: 'NunitoSans-Bold',
-        textAlign: 'center',
-        fontSize: 13,
-        color: '#000',
-    },
     overview: {
-        fontFamily: 'NunitoSans-Bold',
         marginHorizontal: 30,
         marginTop: 20,
         textAlign: 'justify',
-        color: '#929292',
+        color: 'black',
         fontSize: 16,
-    },
-    imgSponsor: {
-        width: 160,
-        height: 100,
-        alignSelf: 'center',
-        marginTop: 4,
-        marginBottom: 2,
     },
 });

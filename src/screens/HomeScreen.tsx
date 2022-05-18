@@ -7,17 +7,16 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import { getPopularMovies, getMoviesByName } from '../api/movies';
+import { getPopularMovies } from '../api/movies';
 import Card from '../components/Card';
-import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LottieView from 'lottie-react-native';
+
+import SplashScreen from '../screens/SplashScreen';
 
 const HomeScreen = ({ navigation }) => {
   const [movies, setMovies] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
-  const [sMovies, setSMovies] = useState(null);
 
   useEffect(() => {
     getPopularMovies().then((response) => {
@@ -25,24 +24,6 @@ const HomeScreen = ({ navigation }) => {
       setLoading(false);
     });
   }, []);
-
-  useEffect(() => {
-    if (size(search) >= 0) {
-      getMoviesByName(search).then((response) => {
-        setSMovies(response.results);
-        setLoading(false);
-      });
-    }
-  }, [search]);
-
-  const onChangeSearch = (e) => {
-    if (size(e) > 0) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
-    setSearch(e);
-  };
 
   const popMovies = () => {
     return (
@@ -61,48 +42,31 @@ const HomeScreen = ({ navigation }) => {
     )
   }
 
-  const searchMovies = () => {
+  const loadingAnimation = () => {
     return (
-      map(sMovies, (movie) => {
-        return (
-          <Card
-            key={movie.id}
-            textBtn="Know more"
-            color={'black'}
-            movie={movie}
-            navigation={navigation}
-          />
-        );
-      })
+      <LottieView
+        source={require('../assets/loading.json')}
+        autoPlay
+        loop
+        speed={0.5}
+      />
     )
   }
 
   return (
     <SafeAreaView style={styles.view}>
-      <Searchbar
-        placeholder="Search a movie"
-        iconColor="#4E73DF"
-        icon="magnify"
-        style={styles.input}
-        inputStyle={{ color: '#000' }}
-        onChangeText={onChangeSearch} value={search} />
       <ScrollView showsVerticalScrollIndicator={false}>
         {loading ? (
-          <View>
-            <LottieView
-              source={require('../assets/loading.json')}
-              autoPlay
-              loop={false}
-              speed={0.5}
-            />
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            {loadingAnimation()}
           </View>
         ) : size(movies) == 0 ? (
-          <Text style={styles.text}>We cannot find any movies</Text>
+          <Text style={styles.text}>We cannot find any movie</Text>
         ) : (
           <View style={styles.view}>
             <Text style={styles.title}>My Movies App</Text>
             <View style={styles.line}></View>
-            {size(sMovies) == 0 ? popMovies() : searchMovies()}
+            {popMovies()}
           </View>
         )}
       </ScrollView>
